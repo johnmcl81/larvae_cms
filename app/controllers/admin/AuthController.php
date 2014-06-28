@@ -1,6 +1,6 @@
 <?php namespace App\Controllers\Admin;
 
-use Auth, BaseController, Form, Input, Redirect, Sentry, View, Notification;
+use Auth, BaseController, Form, Input, Redirect, View, Notification, Validator;
 
 class AuthController extends BaseController {
 
@@ -13,30 +13,47 @@ class AuthController extends BaseController {
                 return View::make('admin.auth.login');
         }
 
+
         /**
          * Login action
          * @return Redirect
          */
         public function postLogin()
         {
-                $credentials = array(
-                        'email' => Input::get('email'),
-                        'password' => Input::get('password')
+                // validate the info, create rules for the inputs
+                $rules = array(
+                        'email'    => 'required|email', // make sure the email is an actual email
+                        'password' => 'required|alphaNum|min:3' // password can only be alphanumeric and has to be greater than 3 characters
                 );
 
-                try
-                {
-                        $user = Sentry::authenticate($credentials, false);
+                // run the validation rules on the inputs from the form
+                $validator = Validator::make(Input::all(), $rules);
 
-                        if ($user)
-                        {
+                // if the validator fails, redirect back to the form
+                if ($validator->fails()) {
+                        Notification::error($validator);
+                        return Redirect::back()
+                                ->withErrors($validator) // send back all errors to the login form
+                                ->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
+
+                } else {
+
+                        // create our user data for the authentication
+                        $userdata = array(
+                                'email'         => Input::get('email'),
+                                'password'      => Input::get('password')
+                        );
+
+                        // attempt to do the login
+                        if (Auth::attempt($userdata)) {
                                 return Redirect::route('admin.pages.index');
+
+                        } else {
+
+                        // validation not successful, send back to form
+                        return Redirect::back()->withInput(Input::except('password'))->withErrors(array('login' => 'Login information incorrect!'));
                         }
-                }
-                catch(\Exception $e)
-                {
-                        Notification::error('Login information incorrect!');
-                        return Redirect::route('admin.login')->withErrors(array('login' => $e->getMessage()));
+
                 }
         }
 
@@ -46,7 +63,7 @@ class AuthController extends BaseController {
          */
         public function getLogout()
         {
-                Sentry::logout();
+                Auth::logout();
 
                 return Redirect::route('admin.login');
         }

@@ -4,8 +4,7 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
-		"cartalyst/sentry": "2.1.*",
+		"laravel/framework": "4.2.*",
         "dflydev/markdown": "v1.0.2",
         "imagine/Imagine": "v0.4.1",
         "way/generators": "dev-master",
@@ -20,7 +19,8 @@
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php",
-        	"app/services"
+        	"app/services",
+        	"public/site"
     ]
 	},
 	"scripts": {

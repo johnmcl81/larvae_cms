@@ -2,7 +2,7 @@
 
 use App\Models\Page;
 use App\Services\Validators\PageValidator;
-use Input, Notification, Redirect, Sentry, Str;
+use Input, Notification, Redirect, Str;
 
 class PagesController extends \BaseController {
 

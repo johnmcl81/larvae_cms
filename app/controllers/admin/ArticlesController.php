@@ -2,7 +2,7 @@
 
 use App\Models\Article;
 use App\Services\Validators\ArticleValidator;
-use Input, Notification, Redirect, Sentry, Str;
+use Input, Notification, Redirect, Str;
 
 class ArticlesController extends \BaseController {
 

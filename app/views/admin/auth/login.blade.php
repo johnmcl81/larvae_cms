@@ -3,16 +3,16 @@
 @section('main')
 
         <div id="login" class="login">
-
+                @if ($errors->has('login'))
+                                <div class="alert alert-error">{{ $errors->first('login', ':message') }}</div>
+                        @endif
                 {{ Form::open() }}
                         <div class="control-group">
                                 {{ Form::label('email', 'Email') }}
                                 <div class="controls">
                                         {{ Form::text('email') }}
                                 </div>
-                                @if ($errors->has('login'))
-                                {{ Notification::showAll() }}
-                                @endif
+
 
                         </div>
 

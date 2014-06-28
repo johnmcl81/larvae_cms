@@ -78,19 +78,3 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
-
-
-
-/*
-|---------------------------------------------------------------------------
-| Sentry Authentication Filter Check
-|---------------------------------------------------------------------------
-*/
-
-Route::filter('auth.admin', function()
-{
-        if ( ! Sentry::check())
-        {
-                return Redirect::route('admin.login');
-        }
-});
